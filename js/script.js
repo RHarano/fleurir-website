@@ -80,21 +80,22 @@ document.addEventListener('DOMContentLoaded', function() {
         body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     }
 
-    if (navToggle) {
+    if (navToggle && navMenu) {
         navToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
     }
 
-    overlay.addEventListener('click', toggleMenu);
-
     // Close menu when clicking nav links
-    const navLinks = navMenu.querySelectorAll('a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (navMenu.classList.contains('active')) {
-                toggleMenu();
-            }
+    if (navMenu) {
+        const navLinks = navMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
         });
-    });
+    }
 
     // ===================================
     // Header Scroll Effect
@@ -309,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
             // Close mobile menu on resize to desktop
-            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+            if (navMenu && window.innerWidth > 768 && navMenu.classList.contains('active')) {
                 toggleMenu();
             }
         }, 250);
