@@ -2503,7 +2503,7 @@ img:not([src]) {
    Menu Page Styles
    =================================== */
 .menu-intro {
-    padding: 60px 0;
+    padding: 40px 0 20px;
     text-align: center;
 }
 
@@ -2511,6 +2511,27 @@ img:not([src]) {
     font-size: 16px;
     line-height: 2;
     color: var(--color-text-light);
+}
+
+.menu-benefits {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.benefit-item {
+    font-size: 15px;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.menu-note-text {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-light);
+    margin-bottom: 30px;
+    line-height: 1.8;
 }
 
 .menu-category {
