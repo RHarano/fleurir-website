@@ -838,11 +838,13 @@ section {
 .menu-image-item {
     overflow: hidden;
     border-radius: 5px;
+    height: 300px;
 }
 
 .menu-image-item img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
 }
