@@ -212,8 +212,9 @@ ul {
     opacity: 0;
     transition: opacity 1s ease;
     background-color: var(--color-bg-alt);
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 .slide:nth-child(1) {
