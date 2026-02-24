@@ -2715,14 +2715,14 @@ img:not([src]) {
     font-family: var(--font-serif);
     font-size: 32px;
     font-weight: 400;
-    color: var(--color-text);
+    color: #9F886E;
     margin: 10px 0 5px;
 }
 
 .service-detail-text h3 {
     font-size: 14px;
     font-weight: 400;
-    color: var(--color-text-light);
+    color: #9F886E;
     letter-spacing: 0.1em;
     margin-bottom: 25px;
 }
