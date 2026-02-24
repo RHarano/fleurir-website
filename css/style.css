@@ -2567,7 +2567,7 @@ img:not([src]) {
 .category-header p {
     font-family: var(--font-serif);
     font-size: 14px;
-    color: var(--color-text-light);
+    color: #9F886E;
     letter-spacing: 0.1em;
 }
 
