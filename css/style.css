@@ -2560,7 +2560,7 @@ img:not([src]) {
     font-family: var(--font-serif);
     font-size: 28px;
     font-weight: 400;
-    color: var(--color-text);
+    color: #9F886E;
     margin-bottom: 5px;
 }
 
