@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サイト管理 | FLEURIR</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+            background: #f5f3f0;
+            line-height: 1.6;
+        }
+        .header {
+            background: #9F886E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 24px; }
+        .nav {
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 1px solid #ddd;
+        }
+        .nav a {
+            padding: 10px 20px;
+            background: #f5f3f0;
+            color: #5a4a3a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .nav a:hover, .nav a.active {
+            background: #9F886E;
+            color: #fff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            color: #9F886E;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f5f3f0;
+        }
+        .card h3 {
+            color: #5a4a3a;
+            margin: 20px 0 10px;
+            font-size: 16px;
+        }
+        .form-group { margin-bottom: 15px; }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #5a4a3a;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        textarea { height: 150px; resize: vertical; }
+        .btn {
+            background: #9F886E;
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .btn:hover { background: #8a7560; }
+        .btn-secondary { background: #666; }
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 12px;
+        }
+        .section-box {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #9F886E;
+        }
+        .manual-section {
+            margin-bottom: 30px;
+        }
+        .manual-section h3 {
+            color: #9F886E;
+            margin-bottom: 15px;
+        }
+        .manual-section ol, .manual-section ul {
+            margin-left: 20px;
+        }
+        .manual-section li {
+            margin-bottom: 10px;
+        }
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .highlight {
+            background: #fff9e6;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #f5f3f0;
+            color: #5a4a3a;
+        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+        .file-structure {
+            font-family: monospace;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .file-structure li {
+            list-style: none;
+            margin: 5px 0;
+        }
+        .folder { color: #9F886E; font-weight: bold; }
+        .file { color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FLEURIR サイト管理</h1>
+    </div>
+
+    <nav class="nav">
+        <a href="#" onclick="showPage('manual')" class="active" id="nav-manual">マニュアル</a>
+        <a href="#" onclick="showPage('blog')" id="nav-blog">ブログ投稿</a>
+        <a href="#" onclick="showPage('pages')" id="nav-pages">ページ編集ガイド</a>
+        <a href="#" onclick="showPage('images')" id="nav-images">画像管理</a>
+        <a href="#" onclick="showPage('ftp')" id="nav-ftp">FTPアクセス</a>
+    </nav>
+
+    <div class="container">
+        <!-- マニュアル -->
+        <div id="page-manual" class="page-content active">
+            <div class="card">
+                <h2>サイト管理マニュアル</h2>
+
+                <div class="manual-section">
+                    <h3>1. サイト構成</h3>
+                    <ul class="file-structure">
+                        <li class="folder">fleurir-eyes.beauty/</li>
+                        <li>&nbsp;&nbsp;<span class="file">index.html</span> - トップページ</li>
+                        <li>&nbsp;&nbsp;<span class="file">about.html</span> - サロン紹介</li>
+                        <li>&nbsp;&nbsp;<span class="file">service.html</span> - サービス紹介</li>
+                        <li>&nbsp;&nbsp;<span class="file">menu.html</span> - 料金メニュー</li>
+                        <li>&nbsp;&nbsp;<span class="file">voice.html</span> - お客様の声</li>
+                        <li>&nbsp;&nbsp;<span class="file">products.html</span> - 商品紹介</li>
+                        <li>&nbsp;&nbsp;<span class="file">news.html</span> - お知らせ一覧</li>
+                        <li>&nbsp;&nbsp;<span class="folder">blog/</span> - ブログ記事</li>
+                        <li>&nbsp;&nbsp;<span class="folder">images/</span> - 画像ファイル</li>
+                        <li>&nbsp;&nbsp;<span class="folder">css/</span> - スタイルシート</li>
+                        <li>&nbsp;&nbsp;<span class="folder">js/</span> - JavaScript</li>
+                    </ul>
+                </div>
+
+                <div class="manual-section">
+                    <h3>2. 編集の基本手順</h3>
+                    <ol>
+                        <li><strong>Xserverファイルマネージャにログイン</strong><br>
+                            <a href="https://www.xserver.ne.jp/login_file.php" target="_blank">https://www.xserver.ne.jp/login_file.php</a></li>
+                        <li><strong>fleurir-eyes.beauty → public_html を開く</strong></li>
+                        <li><strong>編集したいファイルをクリック → 編集</strong></li>
+                        <li><strong>変更を保存</strong></li>
+                    </ol>
+                </div>
+
+                <div class="manual-section">
+                    <h3>3. よくある編集作業</h3>
+                    <table>
+                        <tr>
+                            <th>作業内容</th>
+                            <th>編集ファイル</th>
+                            <th>難易度</th>
+                        </tr>
+                        <tr>
+                            <td>ブログ投稿</td>
+                            <td>blog/新規ファイル</td>
+                            <td>簡単（このツールで作成）</td>
+                        </tr>
+                        <tr>
+                            <td>料金変更</td>
+                            <td>menu.html</td>
+                            <td>簡単</td>
+                        </tr>
+                        <tr>
+                            <td>営業時間変更</td>
+                            <td>index.html</td>
+                            <td>簡単</td>
+                        </tr>
+                        <tr>
+                            <td>画像差し替え</td>
+                            <td>images/フォルダ</td>
+                            <td>簡単</td>
+                        </tr>
+                        <tr>
+                            <td>サービス説明変更</td>
+                            <td>service.html</td>
+                            <td>普通</td>
+                        </tr>
+                        <tr>
+                            <td>お客様の声追加</td>
+                            <td>voice.html</td>
+                            <td>普通</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning">
+                    <strong>注意事項</strong>
+                    <ul>
+                        <li>編集前にバックアップを取ることをおすすめします</li>
+                        <li>HTMLタグ（&lt; &gt;で囲まれた部分）は慎重に編集してください</li>
+                        <li>画像ファイル名は半角英数字のみ使用してください</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ブログ投稿 -->
+        <div id="page-blog" class="page-content">
+            <div class="card">
+                <h2>ブログ記事を作成</h2>
+
+                <form id="blogForm">
+                    <div class="form-group">
+                        <label>タイトル</label>
+                        <input type="text" id="title" required placeholder="例: お客さま日記＊マツエク">
+                    </div>
+
+                    <div class="form-group">
+                        <label>日付</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>カテゴリー</label>
+                        <select id="category">
+                            <option value="ビューティー">ビューティー</option>
+                            <option value="サロン紹介">サロン紹介</option>
+                            <option value="お知らせ">お知らせ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>画像ファイル名（images/blog/にアップロード）</label>
+                        <input type="text" id="imageName" placeholder="例: blog-new.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label>本文</label>
+                        <textarea id="content" placeholder="本文を入力してください。
+
+段落は空行で区切ってください。
+HTMLタグも使用できます。"></textarea>
+                    </div>
+
+                    <button type="button" class="btn" onclick="generateBlogHTML()">HTMLファイルを生成</button>
+                    <button type="button" class="btn btn-secondary" onclick="previewBlog()">プレビュー</button>
+                </form>
+
+                <div id="blogPreview" style="display:none; margin-top:20px; padding:20px; background:#fafafa; border-radius:5px;">
+                    <h3>プレビュー</h3>
+                    <div id="blogPreviewContent"></div>
+                </div>
+
+                <div class="section-box" style="margin-top:20px;">
+                    <h3>アップロード手順</h3>
+                    <ol>
+                        <li>「HTMLファイルを生成」をクリック</li>
+                        <li>ダウンロードされたファイルを保存</li>
+                        <li>ファイルマネージャで <code>blog/</code> フォルダを開く</li>
+                        <li>ファイルをアップロード</li>
+                        <li>画像があれば <code>images/blog/</code> にもアップロード</li>
+                        <li><code>blog/index.html</code> に新記事のリンクを追加</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- ページ編集ガイド -->
+        <div id="page-pages" class="page-content">
+            <div class="card">
+                <h2>各ページの編集方法</h2>
+
+                <div class="section-box">
+                    <h3>料金を変更する（menu.html）</h3>
+                    <p>料金は以下の形式で記載されています：</p>
+                    <div class="code-box">&lt;span class="price-value"&gt;<span class="highlight">¥5890</span>&lt;/span&gt;</div>
+                    <p>黄色の部分の数字を変更してください。</p>
+                </div>
+
+                <div class="section-box">
+                    <h3>営業時間を変更する（index.html）</h3>
+                    <p>「営業時間」で検索して、以下の部分を編集：</p>
+                    <div class="code-box">&lt;p&gt;<span class="highlight">10:00～18:30</span>（最終受付17:30）&lt;/p&gt;</div>
+                </div>
+
+                <div class="section-box">
+                    <h3>サービス説明を変更する（service.html）</h3>
+                    <p>各サービスの説明文は <code>&lt;p&gt;</code> タグ内にあります：</p>
+                    <div class="code-box">&lt;p class="service-lead"&gt;<span class="highlight">説明文をここに入力</span>&lt;/p&gt;</div>
+                </div>
+
+                <div class="section-box">
+                    <h3>画像を差し替える</h3>
+                    <p>画像は以下の形式で指定されています：</p>
+                    <div class="code-box">&lt;img src="images/menu/<span class="highlight">ファイル名.jpg</span>" alt="説明"&gt;</div>
+                    <ol>
+                        <li>新しい画像をimages/適切なフォルダにアップロード</li>
+                        <li>HTMLファイルの該当箇所のファイル名を変更</li>
+                    </ol>
+                </div>
+
+                <div class="section-box">
+                    <h3>お客様の声を追加する（voice.html）</h3>
+                    <p>既存の声のブロックをコピーして編集：</p>
+                    <div class="code-box">&lt;div class="voice-card-img"&gt;
+    &lt;img src="images/voice/<span class="highlight">voice-XX.jpg</span>" alt="説明"&gt;
+&lt;/div&gt;</div>
+                </div>
+
+                <div class="info">
+                    <strong>ヒント</strong>
+                    <p>ファイルマネージャの「編集」機能で、Ctrl+F（Mac: Cmd+F）を使って検索できます。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 画像管理 -->
+        <div id="page-images" class="page-content">
+            <div class="card">
+                <h2>画像管理</h2>
+
+                <div class="manual-section">
+                    <h3>画像フォルダ構成</h3>
+                    <table>
+                        <tr>
+                            <th>フォルダ</th>
+                            <th>用途</th>
+                            <th>推奨サイズ</th>
+                        </tr>
+                        <tr>
+                            <td>images/</td>
+                            <td>メイン画像（トップ、サービス）</td>
+                            <td>横1200px以上</td>
+                        </tr>
+                        <tr>
+                            <td>images/menu/</td>
+                            <td>メニュー・料金ページの画像</td>
+                            <td>横800px程度</td>
+                        </tr>
+                        <tr>
+                            <td>images/blog/</td>
+                            <td>ブログ記事の画像</td>
+                            <td>横800px程度</td>
+                        </tr>
+                        <tr>
+                            <td>images/voice/</td>
+                            <td>お客様の声の画像</td>
+                            <td>横600px程度</td>
+                        </tr>
+                        <tr>
+                            <td>images/products/</td>
+                            <td>商品画像</td>
+                            <td>横600px程度</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning">
+                    <strong>画像アップロード時の注意</strong>
+                    <ul>
+                        <li>ファイル名は<strong>半角英数字とハイフン</strong>のみ使用</li>
+                        <li>日本語ファイル名は使用不可</li>
+                        <li>大文字小文字は区別されます</li>
+                        <li>推奨形式: JPG, PNG</li>
+                        <li>ファイルサイズ: 500KB以下推奨</li>
+                    </ul>
+                </div>
+
+                <div class="section-box">
+                    <h3>画像の差し替え手順</h3>
+                    <ol>
+                        <li>新しい画像を<strong>同じファイル名</strong>でアップロード（上書き）</li>
+                        <li>または新しいファイル名でアップロードし、HTMLを編集</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- FTPアクセス -->
+        <div id="page-ftp" class="page-content">
+            <div class="card">
+                <h2>FTP/ファイルマネージャ情報</h2>
+
+                <div class="section-box">
+                    <h3>Xserver ファイルマネージャ（推奨）</h3>
+                    <p><a href="https://www.xserver.ne.jp/login_file.php" target="_blank" class="btn">ファイルマネージャを開く</a></p>
+                    <p>ブラウザから直接ファイルを編集・アップロードできます。</p>
+                </div>
+
+                <div class="section-box">
+                    <h3>FTP接続情報</h3>
+                    <table>
+                        <tr>
+                            <th>項目</th>
+                            <th>値</th>
+                        </tr>
+                        <tr>
+                            <td>FTPサーバー</td>
+                            <td>sv13411.xserver.jp</td>
+                        </tr>
+                        <tr>
+                            <td>ユーザー名</td>
+                            <td>fleurir@fleurir-eyes.beauty</td>
+                        </tr>
+                        <tr>
+                            <td>ポート</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td>プロトコル</td>
+                            <td>FTP over TLS</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top:10px;"><small>※パスワードは別途管理してください</small></p>
+                </div>
+
+                <div class="section-box">
+                    <h3>おすすめFTPソフト</h3>
+                    <ul>
+                        <li><strong>FileZilla</strong>（無料）- <a href="https://filezilla-project.org/" target="_blank">ダウンロード</a></li>
+                        <li><strong>Cyberduck</strong>（無料）- <a href="https://cyberduck.io/" target="_blank">ダウンロード</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 今日の日付をデフォルトに
+        document.getElementById('date').valueAsDate = new Date();
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.getElementById('nav-' + pageId).classList.add('active');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.getFullYear() + '.' +
+                String(date.getMonth() + 1).padStart(2, '0') + '.' +
+                String(date.getDate()).padStart(2, '0');
+        }
+
+        function generateBlogHTML() {
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const category = document.getElementById('category').value;
+            const imageName = document.getElementById('imageName').value || 'blog-1.jpeg';
+            const content = document.getElementById('content').value;
+
+            if (!title || !date) {
+                alert('タイトルと日付は必須です');
+                return;
+            }
+
+            // 本文を段落に変換
+            const paragraphs = content.split('\n\n').map(p =>
+                p.trim() ? (p.startsWith('<') ? p : '<p>' + p.replace(/\n/g, '<br>') + '</p>') : ''
+            ).join('\n                ');
+
+            const html = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="${title} - FLEURIR ブログ">
+    <title>${title} | FLEURIR Blog</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <a href="../index.html">
+                    <h1>FLEURIR</h1>
+                    <span class="logo-tagline">Eye Lash & Facial Wax Salon</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="メニューを開く">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="../about.html">About<span>サロン紹介</span></a></li>
+                    <li><a href="../service.html">Service<span>サービス</span></a></li>
+                    <li><a href="../menu.html">Price<span>料金</span></a></li>
+                    <li><a href="../voice.html">Voice<span>お客様の声</span></a></li>
+                    <li><a href="index.html" class="active">Blog<span>ブログ</span></a></li>
+                    <li><a href="../products.html">Products<span>商品</span></a></li>
+                    <li><a href="../index.html#contact">Access<span>アクセス</span></a></li>
+                    <li class="nav-reservation"><a href="../index.html#reservation">ご予約</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <article class="blog-post">
+        <div class="container">
+            <div class="blog-post-header">
+                <span class="blog-post-category">${category}</span>
+                <h1 class="blog-post-title">${title}</h1>
+                <time class="blog-post-date">${formatDate(date)}</time>
+            </div>
+            <div class="blog-post-image">
+                <img src="../images/blog/${imageName}" alt="${title}">
+            </div>
+            <div class="blog-post-content">
+                ${paragraphs}
+            </div>
+            <div class="blog-post-nav">
+                <a href="index.html" class="btn btn-outline">ブログ一覧に戻る</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>FLEURIR</h2>
+                    <p>Eye Lash & Facial Wax Salon</p>
+                </div>
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../service.html">Service</a></li>
+                        <li><a href="../menu.html">Price</a></li>
+                        <li><a href="../voice.html">Voice</a></li>
+                        <li><a href="index.html">Blog</a></li>
+                        <li><a href="../products.html">Products</a></li>
+                        <li><a href="../index.html#contact">Access</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FLEURIR. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const filename = 'blog-' + date + '.html';
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('ファイル「' + filename + '」がダウンロードされました。\\nblog/フォルダにアップロードしてください。');
+        }
+
+        function previewBlog() {
+            const title = document.getElementById('title').value || '(タイトル未入力)';
+            const date = document.getElementById('date').value;
+            const category = document.getElementById('category').value;
+            const content = document.getElementById('content').value || '(本文未入力)';
+
+            document.getElementById('blogPreviewContent').innerHTML = `
+                <p><strong>カテゴリー:</strong> ${category}</p>
+                <h4 style="color:#9F886E;margin:10px 0;">${title}</h4>
+                <p><strong>日付:</strong> ${date ? formatDate(date) : '未設定'}</p>
+                <hr style="margin:15px 0;">
+                <div>${content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</div>
+            `;
+            document.getElementById('blogPreview').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
