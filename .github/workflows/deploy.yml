@@ -20,8 +20,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # エックスサーバーの公開フォルダ（このドメインの web 公開ディレクトリ）
-          server-dir: /fleurir-eyes.beauty/public_html/
+          # FTPログイン直後のフォルダ（このアカウントは公開フォルダ直下にログインする想定）
+          server-dir: ./
           # FTP over TLS（エックスサーバー等の国内サーバーは ftps が一般的）
           # うまくいかない場合は ftp に変更してください
           protocol: ftps
