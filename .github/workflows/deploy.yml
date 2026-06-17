@@ -1,0 +1,36 @@
+name: Deploy to server via FTP
+
+# main に push されたとき、または手動実行で本番サーバーへFTPアップロードします。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # 認証情報はすべて GitHub の暗号化シークレットから読み込みます（公開リポジトリのため直書き禁止）
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # サーバー側の公開フォルダ（例: /fleurir-eyes.beauty/public_html/ など）
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # FTP over TLS（エックスサーバー等の国内サーバーは ftps が一般的）
+          # うまくいかない場合は ftp に変更してください
+          protocol: ftps
+          # 既存のサーバー専用ファイル（管理画面でアップした画像など）は消さない安全設定
+          dangerous-clean-slate: false
+          # アップロード不要なものを除外
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.htaccess.bak
+            **/*.md
